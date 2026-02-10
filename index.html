@@ -23,7 +23,7 @@ body {
 /* Floating hearts */
 .floating-heart {
   position: absolute;
-  opacity: 0.2;
+  opacity: 0.25;
   animation: float 3s ease-in-out infinite;
   pointer-events: none;
 }
@@ -35,9 +35,9 @@ body {
 
 /* Video */
 video {
-  width: 95vw;
-  max-width: 480px;
-  max-height: 75vh;
+  width: 100%;
+  max-width: 520px;
+  height: auto;
   border-radius: 22px;
   margin-bottom: 2rem;
   box-shadow: 0 20px 45px rgba(0,0,0,0.35);
@@ -102,6 +102,7 @@ button {
   flex-direction: column;
   text-align: center;
   padding: 1rem;
+  overflow-y: auto;
 }
 
 .celebration h1 {
@@ -111,15 +112,28 @@ button {
 }
 
 .celebration p {
-  font-size: 1.4rem;
-  color: rgba(255,255,255,0.9);
+  font-size: 1.3rem;
+  color: rgba(255,255,255,0.95);
+  max-width: 650px;
+  margin-top: 0.6rem;
 }
 
+#typingText {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Mobile */
 @media (max-width: 640px) {
+  video {
+    width: 100vw;
+    max-width: none;
+    max-height: 80vh;
+    border-radius: 18px;
+  }
+
   h1 { font-size: 1.8rem; }
-  video { width: 90vw; max-height: 65vh; }
-  .celebration h1 { font-size: 2rem; }
-  .celebration-text { font-size: 1rem; line-height: 1.5; }
+  .celebration h1 { font-size: 2.2rem; }
 }
 </style>
 </head>
@@ -141,7 +155,7 @@ for (let i = 0; i < 14; i++) {
 }
 </script>
 
-<!-- Minion-style video -->
+<!-- Video -->
 <video autoplay loop muted playsinline>
   <source src="video.mp4" type="video/mp4">
 </video>
@@ -158,10 +172,11 @@ for (let i = 0; i < 14; i++) {
   <video autoplay loop muted playsinline>
     <source src="video.mp4" type="video/mp4">
   </video>
+
   <h1>YAAAY 💕</h1>
-  <p>I'm the luckiest man on the planet for having you Noha🥹</p>
-  <p>You're my love, my joy, and my pride. Every second I spend with you is priceless, thank you so much for being mine💖</p>
-  <p>I adore you Noha, I wish we could be together to show you how much you truly mean to me 💗</p>
+  <p id="timer"></p>
+  <p id="typingText"></p>
+
 </div>
 
 <!-- Confetti -->
@@ -187,22 +202,24 @@ function sayNo() {
 
   noBtn.textContent = noTexts[noCount];
 
-  // Grow YES (capped)
   const scale = Math.min(1 + noCount * 0.25, 2.8);
   yesBtn.style.transform = `scale(${scale})`;
   yesBtn.style.fontSize = (16 + noCount * 2) + 'px';
 
-  // Shrink NO
   noBtn.style.transform = `scale(${Math.max(1 - noCount * 0.07, 0.55)})`;
 
-  // Run away after a few clicks
   if (noCount >= 4) {
     noBtn.style.position = 'absolute';
     noBtn.style.left = Math.random() * 70 + 10 + '%';
     noBtn.style.top = Math.random() * 70 + 10 + '%';
   }
+
+  if (noCount === 6) {
+    noBtn.textContent = "You really think I'd give up on you? 💕";
+  }
 }
 
+/* Confetti hearts */
 function fireHearts() {
   confetti({
     particleCount: 60,
@@ -213,11 +230,62 @@ function fireHearts() {
   });
 }
 
+/* Love timer */
+const startDate = new Date("2025-03-10"); 
+
+setInterval(() => {
+  const now = new Date();
+  const diff = now - startDate;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  document.getElementById("timer").textContent =
+    `I've loved you for ${days} days and counting 💗`;
+}, 1000);
+
+/* Typewriter text */
+const loveText =
+  "I'm the luckiest man on the planet for having you Noha 🥹\n"+
+  "You're my love, my joy, and my pride.\n"+
+  "Every second with you is priceless 💖\n"+
+  "From the moment you came into my life, everything felt lighter. \n" +
+  "You make my days brighter, my heart calmer, and my smile real. \n" +
+  "I promise to always choose you, today and every day 💞\n"+
+  "I can't wait to create countless memories together and cherish every moment with you. \n"+
+  "You are my forever Valentine, thank you for being you, and for loving me. You make me feel alive Noha, I love you endlessly 💘";
+
+function typeText(text, el, speed = 50, lineDelay = 800) {
+  let i = 0;
+  el.textContent = "";
+  const type = () => {
+    const char = text[i];
+    el.textContent += char;
+    i++;
+    
+    if (i >= text.length) return;
+    
+    // If the current character is a newline, add a longer delay
+    if (char === '\n') {
+      setTimeout(type, lineDelay);
+    } else {
+      setTimeout(type, speed);
+    }
+  };
+  type();
+}
+
 function sayYes() {
   document.getElementById('celebration').style.display = 'flex';
+
   fireHearts();
   const iv = setInterval(fireHearts, 1200);
   setTimeout(() => clearInterval(iv), 6000);
+
+  setTimeout(() => {
+    typeText(loveText, document.getElementById('typingText'));
+  }, 1000);
+
+  setTimeout(() => {
+    document.getElementById("secretPic").style.display = "block";
+  }, 3000);
 }
 </script>
 
