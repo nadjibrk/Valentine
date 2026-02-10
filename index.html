@@ -29,15 +29,15 @@ body {
 }
 
 @keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+  0%,100% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
+  50% { transform: translateY(-25px) rotate(180deg); opacity: 0.6; }
 }
 
 /* Video */
 video {
-  width: 95vw;        /* almost full width on phones */
-  max-width: 480px;   /* desktop cap */
-  max-height: 75vh;   /* keep it from overflowing */
+  width: 95vw;
+  max-width: 480px;
+  max-height: 75vh;
   border-radius: 22px;
   margin-bottom: 2rem;
   box-shadow: 0 20px 45px rgba(0,0,0,0.35);
@@ -76,9 +76,7 @@ button {
   color: white;
 }
 
-#yesBtn:hover {
-  background: #16a34a;
-}
+#yesBtn:hover { background: #16a34a; }
 
 #noBtn {
   background: #fb7185;
@@ -86,9 +84,7 @@ button {
   position: relative;
 }
 
-#noBtn:hover {
-  background: #f43f5e;
-}
+#noBtn:hover { background: #f43f5e; }
 
 /* Celebration overlay */
 .celebration {
@@ -108,22 +104,32 @@ button {
   font-size: 3rem;
   color: white;
   margin-top: 1rem;
+  text-shadow: 2px 2px 12px rgba(0,0,0,0.35);
 }
 
-.celebration p {
-  font-size: 1.4rem;
-  color: rgba(255,255,255,0.9);
+.celebration-text {
+  max-width: 650px;
+  margin-top: 1rem;
+  text-align: center;
+  color: #ffe4ee;
+  font-size: 1.55rem;
+  line-height: 1.7;
+  text-shadow: 1px 1px 12px rgba(0,0,0,0.3);
+}
+
+.celebration-text p {
+  margin: 0.8rem 0;
 }
 
 /* Mobile tweaks */
 @media (max-width: 640px) {
-  h1 { font-size: 1.7rem; }
-  video { width: 11rem; }
-  .celebration h1 { font-size: 2.2rem; }
+  h1 { font-size: 1.8rem; }
+  video { width: 90vw; max-height: 65vh; }
+  .celebration h1 { font-size: 2.4rem; }
+  .celebration-text { font-size: 1.3rem; line-height: 1.6; }
 }
 </style>
 </head>
-
 <body>
 
 <!-- Floating hearts -->
@@ -141,7 +147,7 @@ for (let i = 0; i < 14; i++) {
 }
 </script>
 
-<!-- Minion-style video -->
+<!-- Main video -->
 <video autoplay loop muted playsinline>
   <source src="video.mp4" type="video/mp4">
 </video>
@@ -159,9 +165,11 @@ for (let i = 0; i < 14; i++) {
     <source src="video.mp4" type="video/mp4">
   </video>
   <h1>YAAAY 💕</h1>
-  <p>I'm the luckiest man on the planet for having you Noha🥹</p>
-  <p>You're my love, my joy, and my pride. Every second I spend with you is priceless, thank you so much for being mine💖</p>
-  <p>I adore you Noha, I wish we could be together to show you how much you truly mean to me 💗</p>
+  <div class="celebration-text">
+    <p>I'm the luckiest man on the planet for having you Noha 🥹</p>
+    <p>You're my love, my joy, and my pride. Every second I spend with you is priceless, thank you so much for being mine 💖</p>
+    <p>I adore you Noha, I wish we could be together to show you how much you truly mean to me 💗</p>
+  </div>
 </div>
 
 <!-- Confetti -->
@@ -187,17 +195,18 @@ function sayNo() {
 
   noBtn.textContent = noTexts[noCount];
 
-  // Grow YES (capped)
-  const scale = Math.min(1 + noCount * 0.25, 2.8);
+  // Grow YES (smooth scaling)
+  const scale = Math.min(1 + noCount * 0.25, 2.5);
   yesBtn.style.transform = `scale(${scale})`;
   yesBtn.style.fontSize = (16 + noCount * 2) + 'px';
 
   // Shrink NO
   noBtn.style.transform = `scale(${Math.max(1 - noCount * 0.07, 0.55)})`;
 
-  // Run away after a few clicks
+  // Slide NO around after several clicks
   if (noCount >= 4) {
     noBtn.style.position = 'absolute';
+    noBtn.style.transition = 'all 0.3s ease';
     noBtn.style.left = Math.random() * 70 + 10 + '%';
     noBtn.style.top = Math.random() * 70 + 10 + '%';
   }
@@ -209,6 +218,7 @@ function fireHearts() {
     spread: 360,
     startVelocity: 25,
     gravity: 0.5,
+    shapes: ['heart'],
     colors: ['#ff6b81','#ff4757','#fd79a8','#e84393']
   });
 }
