@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will you be my Valentine? 💝</title>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fce4ec, #fecdd3, #fbcfe8);
+  font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+/* Floating hearts */
+.floating-heart {
+  position: absolute;
+  opacity: 0.2;
+  animation: float 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+/* Video */
+video {
+  width: min(90vw, 420px);   /* BIG on desktop, fits phones */
+  max-height: 65vh;
+  border-radius: 22px;
+  margin-bottom: 2rem;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+}
+
+/* Text */
+h1 {
+  font-size: 2.3rem;
+  color: #e11d48;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+button {
+  font-family: inherit;
+  font-weight: bold;
+  border: none;
+  border-radius: 9999px;
+  padding: 12px 32px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+#yesBtn {
+  background: #22c55e;
+  color: white;
+}
+
+#yesBtn:hover {
+  background: #16a34a;
+}
+
+#noBtn {
+  background: #fb7185;
+  color: white;
+  position: relative;
+}
+
+#noBtn:hover {
+  background: #f43f5e;
+}
+
+/* Celebration overlay */
+.celebration {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #f472b6, #fb7185, #f87171);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 1rem;
+}
+
+.celebration h1 {
+  font-size: 3rem;
+  color: white;
+  margin-top: 1rem;
+}
+
+.celebration p {
+  font-size: 1.4rem;
+  color: rgba(255,255,255,0.9);
+}
+
+/* Mobile tweaks */
+@media (max-width: 640px) {
+  h1 { font-size: 1.7rem; }
+  video { width: 11rem; }
+  .celebration h1 { font-size: 2.2rem; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Floating hearts -->
+<script>
+for (let i = 0; i < 14; i++) {
+  const h = document.createElement('div');
+  h.className = 'floating-heart';
+  h.textContent = '💕';
+  h.style.left = Math.random() * 100 + '%';
+  h.style.top = Math.random() * 100 + '%';
+  h.style.fontSize = (14 + Math.random() * 20) + 'px';
+  h.style.animationDuration = (2 + Math.random() * 3) + 's';
+  h.style.animationDelay = (Math.random() * 2) + 's';
+  document.body.appendChild(h);
+}
+</script>
+
+<!-- Minion-style video -->
+<video autoplay loop muted playsinline>
+  <source src="video.mp4" type="video/mp4">
+</video>
+
+<h1>Will you be my Valentine? 💝</h1>
+
+<div class="buttons">
+  <button id="yesBtn" onclick="sayYes()">Yes! 💖</button>
+  <button id="noBtn" onclick="sayNo()">No</button>
+</div>
+
+<!-- Celebration -->
+<div class="celebration" id="celebration">
+  <video autoplay loop muted playsinline>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+  <h1>YAAAY 💕</h1>
+  <p>I knew you'd say yes 😘</p>
+</div>
+
+<!-- Confetti -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+
+<script>
+const noTexts = [
+  "No",
+  "Are you sure? 🥺",
+  "Please say yes 😭",
+  "Think again...",
+  "You're breaking my heart 💔",
+  "I'll cry 😢",
+  "PLEASE 😭"
+];
+
+let noCount = 0;
+
+function sayNo() {
+  noCount = Math.min(noCount + 1, noTexts.length - 1);
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
+
+  noBtn.textContent = noTexts[noCount];
+
+  // Grow YES (capped)
+  const scale = Math.min(1 + noCount * 0.25, 2.8);
+  yesBtn.style.transform = `scale(${scale})`;
+  yesBtn.style.fontSize = (16 + noCount * 2) + 'px';
+
+  // Shrink NO
+  noBtn.style.transform = `scale(${Math.max(1 - noCount * 0.07, 0.55)})`;
+
+  // Run away after a few clicks
+  if (noCount >= 4) {
+    noBtn.style.position = 'absolute';
+    noBtn.style.left = Math.random() * 70 + 10 + '%';
+    noBtn.style.top = Math.random() * 70 + 10 + '%';
+  }
+}
+
+function fireHearts() {
+  confetti({
+    particleCount: 60,
+    spread: 360,
+    startVelocity: 25,
+    gravity: 0.5,
+    colors: ['#ff6b81','#ff4757','#fd79a8','#e84393']
+  });
+}
+
+function sayYes() {
+  document.getElementById('celebration').style.display = 'flex';
+  fireHearts();
+  const iv = setInterval(fireHearts, 1200);
+  setTimeout(() => clearInterval(iv), 6000);
+}
+</script>
+
+</body>
+</html>
