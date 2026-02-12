@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+
 <title>Will you be my Valentine? 💝</title>
 
 <style>
@@ -15,9 +18,8 @@ body {
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #fce4ec, #fecdd3, #fbcfe8);
-  font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
-  overflow: hidden;
   padding: 1rem;
+  position: relative;
 }
 
 /* Floating hearts */
@@ -42,13 +44,18 @@ video {
   margin-bottom: 1rem;
   box-shadow: 0 20px 45px rgba(0,0,0,0.35);
 }
-
+.softFont {
+  font-family: 'Parisienne', cursive;
+  font-size: 2.2rem;
+  font-weight: 600;
+}
 /* Text */
 h1 {
   font-size: 2.3rem;
   color: #e11d48;
   text-align: center;
   margin-bottom: 1rem;
+
 }
 
 /* Buttons */
@@ -103,19 +110,22 @@ button {
   text-align: center;
   padding: 1rem;
   overflow-y: auto;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
 .celebration h1 {
-  font-size: 3rem;
+  font-size: 2.2rem;
   color: white;
-  margin-top: 1rem;
+  font-family: 'Fredoka One', cursive;
+  font-weight: normal;
+  text-shadow: 0 3px 8px rgba(0,0,0,0.25);
 }
 
 .celebration p {
   font-size: 1.3rem;
   color: rgba(255,255,255,0.95);
   max-width: 550px;
-  margin-top: 0.6rem;
 }
 
 #typingText {
@@ -124,17 +134,19 @@ button {
 }
 
 /* Mobile */
-@media (max-width: 640px) {
+@media (max-width: 400px) {
   video {
     width: 100vw;
     max-width: none;
     max-height: 80vh;
     border-radius: 18px;
   }
-
-  h1 { font-size: 1.8rem; }
-  .celebration h1 { font-size: 2.2rem; }
+  button {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
 }
+
 </style>
 </head>
 
@@ -142,40 +154,42 @@ button {
 
 <!-- Floating hearts -->
 <script>
-for (let i = 0; i < 14; i++) {
-  const h = document.createElement('div');
-  h.className = 'floating-heart';
-  h.textContent = '💕';
-  h.style.left = Math.random() * 100 + '%';
-  h.style.top = Math.random() * 100 + '%';
-  h.style.fontSize = (14 + Math.random() * 20) + 'px';
-  h.style.animationDuration = (2 + Math.random() * 3) + 's';
-  h.style.animationDelay = (Math.random() * 2) + 's';
-  document.body.appendChild(h);
+function createHearts() {
+  for (let i = 0; i < 14; i++) {
+    const h = document.createElement('div');
+    h.className = 'floating-heart';
+    h.textContent = '💕';
+    h.style.left = Math.random() * 100 + '%';
+    h.style.top = Math.random() * 100 + '%';
+    h.style.fontSize = (14 + Math.random() * 20) + 'px';
+    h.style.animationDuration = (2 + Math.random() * 3) + 's';
+    h.style.animationDelay = (Math.random() * 2) + 's';
+    document.body.appendChild(h);
+  }
 }
+
+window.addEventListener("load", createHearts);
+
 </script>
 
 <!-- Video -->
-<video autoplay loop muted playsinline>
+<video id="initialVideo" autoplay loop muted playsinline>
   <source src="video.mp4" type="video/mp4">
 </video>
+<h1 class="softFont">Will you be my Valentine Noha? 💝</h1>
 
-<h1>Will you be my Valentine Noha? 💝</h1>
-
-<div class="buttons">
+<div class="softFont" id="buttons">
   <button id="yesBtn" onclick="sayYes()">Yes! 💖</button>
   <button id="noBtn" onclick="sayNo()">No</button>
 </div>
+<img id="mainPicture" src="picture1.jpeg" alt="Picture" style="width: 200px; border-radius: 18px; margin-bottom: 1rem; margin-top: 1rem;">
 
 <!-- Celebration -->
 <div class="celebration" id="celebration">
-  <video autoplay loop muted playsinline>
-    <source src="video.mp4" type="video/mp4">
-  </video>
-
-  <h1>YAAAY 💕</h1>
-  <p id="timer"></p>
-  <p id="typingText"></p>
+  <img id="celebrationPicture" src="picture2.jpeg" alt="Picture" style="width: 240px; border-radius: 18px; margin-bottom: 1rem;">
+  <h1>YAAAY 🥳🥳💕</h1>
+  <p id="timer" class="softFont"></p>
+  <p id="typingText" class="softFont"></p>
 
 </div>
 
@@ -208,11 +222,21 @@ function sayNo() {
 
   noBtn.style.transform = `scale(${Math.max(1 - noCount * 0.07, 0.55)})`;
 
-  if (noCount >= 4) {
-    noBtn.style.position = 'absolute';
-    noBtn.style.left = Math.random() * 70 + 10 + '%';
-    noBtn.style.top = Math.random() * 70 + 10 + '%';
-  }
+  if (noCount >= 3) {
+  noBtn.style.position = "fixed";
+
+  const padding = 80; // keeps away from edges
+  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+  const randomX = Math.random() * maxX + padding / 2;
+  const randomY = Math.random() * maxY + padding / 2;
+
+  noBtn.style.left = randomX + "px";
+  noBtn.style.top = randomY + "px";
+}
+
+
 
   if (noCount === 3) {
     noBtn.textContent = "You really think I'd give up on you? 💕";
@@ -231,15 +255,24 @@ function fireHearts() {
 }
 
 /* Love timer */
-const startDate = new Date("2025-03-10"); 
+const startDate = new Date("2025-03-10T05:49:00");
 
-setInterval(() => {
+function updateTimer() {
   const now = new Date();
   const diff = now - startDate;
+
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
   document.getElementById("timer").textContent =
-    `I've loved you for ${days} days and counting 💗`;
-}, 1000);
+    `I've loved you for ${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds 💗`;
+}
+
+updateTimer();
+setInterval(updateTimer, 1000);
+
 
 /* Typewriter text */
 const loveText =
@@ -273,19 +306,24 @@ function typeText(text, el, speed = 50, lineDelay = 800) {
 }
 
 function sayYes() {
-  document.getElementById('celebration').style.display = 'flex';
+  // Hide initial video and show pictures
+  document.getElementById('initialVideo').style.display = 'none';
+  document.getElementById('mainPicture').style.display = 'none';
+
+  const celebration = document.getElementById('celebration');
+  celebration.style.display = 'flex';
+  setTimeout(() => {
+    celebration.style.opacity = '1';
+  }, 10);
 
   fireHearts();
-  const iv = setInterval(fireHearts, 1200);
+  const iv = setInterval(fireHearts, 1200); 
   setTimeout(() => clearInterval(iv), 6000);
 
   setTimeout(() => {
     typeText(loveText, document.getElementById('typingText'));
   }, 1000);
 
-  setTimeout(() => {
-    document.getElementById("secretPic").style.display = "block";
-  }, 3000);
 }
 </script>
 
