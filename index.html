@@ -69,9 +69,10 @@ h1 {
 button {
   font-family: inherit;
   font-weight: bold;
+  font-size: 14px;
   border: none;
   border-radius: 9999px;
-  padding: 12px 32px;
+  padding: 10px 24px;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -131,6 +132,10 @@ button {
 #typingText {
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+.main  #mainPicture {
+    width: 160px; /* smaller on mobile */
 }
 
 /* Mobile */
@@ -223,25 +228,24 @@ function sayNo() {
   noBtn.style.transform = `scale(${Math.max(1 - noCount * 0.07, 0.55)})`;
 
   if (noCount >= 3) {
-  noBtn.style.position = "fixed";
+    noBtn.style.position = "fixed";
 
-  const padding = 80; // keeps away from edges
-  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+    const padding = 40; // keeps away from edges
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight/2 - noBtn.offsetHeight; // only bottom half
 
-  const randomX = Math.random() * maxX + padding / 2;
-  const randomY = Math.random() * maxY + padding / 2;
+    const randomX = Math.random() * maxX + padding/2;
+    const randomY = Math.random() * maxY + window.innerHeight/2; // bottom half
 
-  noBtn.style.left = randomX + "px";
-  noBtn.style.top = randomY + "px";
-}
-
-
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+  }
 
   if (noCount === 3) {
     noBtn.textContent = "You really think I'd give up on you? 💕";
   }
 }
+
 
 /* Confetti hearts */
 function fireHearts() {
