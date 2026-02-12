@@ -137,7 +137,11 @@ button {
 .main  #mainPicture {
     width: 160px; /* smaller on mobile */
 }
-
+#celebrationPicture {
+  width: 160px;
+  border-radius: 18px; 
+  margin-bottom: 0.5rem;
+}
 /* Mobile */
 @media (max-width: 400px) {
   video {
@@ -191,7 +195,7 @@ window.addEventListener("load", createHearts);
 
 <!-- Celebration -->
 <div class="celebration" id="celebration">
-  <img id="celebrationPicture" src="picture2.jpeg" alt="Picture" style="width: 240px; border-radius: 18px; margin-bottom: 1rem;">
+  <img id="celebrationPicture" src="picture2.jpeg" alt="Picture">
   <h1>YAAAY 🥳🥳💕</h1>
   <p id="timer" class="softFont"></p>
   <p id="typingText" class="softFont"></p>
