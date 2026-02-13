@@ -232,8 +232,11 @@ const noTexts = [
 ];
 
 let noCount = 0;
+let celebrationActive = false;
 
 document.addEventListener("click", (e) => {
+  if (!celebrationActive) return;
+
   confetti({
     particleCount: 40,
     spread: 70,
@@ -344,6 +347,7 @@ function sayYes() {
   // Hide initial video and show pictures
   document.getElementById('initialVideo').style.display = 'none';
   document.getElementById('mainPicture').style.display = 'none';
+  celebrationActive = true;
 
   const celebration = document.getElementById('celebration');
   celebration.style.display = 'flex';
